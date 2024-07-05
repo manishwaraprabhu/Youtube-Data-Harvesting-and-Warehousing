@@ -18,7 +18,7 @@ After choosing a Channel, we get a button TO SQL to insert the Channel data into
 After the data is stored in our database, we get a message "Data Inserted in SQL".
 If the data already exists, we get to see "Data Already Exists in SQL".
 Now we move on to the next page "Query Data". We have 10 questions here, based the data stored in SQL each query should give us the correct answers. I have previously tested my SQL Queries using DBBrowser(SQLite) to check how the queries work on the stored data in the database.
-As the queries are written perfect, all the 10 queries were answered perfectly.
+As the queries are written perfect, all the 10 queries were answered correctly.
 
 
 
