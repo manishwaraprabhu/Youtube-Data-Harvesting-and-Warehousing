@@ -8,3 +8,4 @@ I have created four tables named Channel, Video, Comment, and Playlist with nece
 I have executed four seperate codes to fill the tables in my SQL database to check if all the parameters in all the tables are filled after I extract the data.
 Now that I have tested if the parameters in all my SQL tables are filled as my API Key works fine to extract data and store it in the database, I have moved on to the main streamlit application code.
 I have understood how the API Key works and all my tables in my database are well interlinked and well structured, I have started coding and built the streamlit application successfully matching all my project requirements.
+So, the project required building a streamlit 
