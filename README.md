@@ -8,4 +8,20 @@ I have created four tables named Channel, Video, Comment, and Playlist with nece
 I have executed four seperate codes to fill the tables in my SQL database to check if all the parameters in all the tables are filled after I extract the data.
 Now that I have tested if the parameters in all my SQL tables are filled as my API Key works fine to extract data and store it in the database, I have moved on to the main streamlit application code.
 I have understood how the API Key works and all my tables in my database are well interlinked and well structured, I have started coding and built the streamlit application successfully matching all my project requirements.
-So, the project required building a streamlit 
+So, the project required building a streamlit application with navigation pages, namely Data Harvesting, Data Warehousing and Query Data.
+I have referred to streamlit documentation, that helped me building the application.
+In the Data Harvesting page, I need to enter a Channel ID. After entering a Channel ID and click on the button SCRAP, it should display the details of the channel and a message "Channel Data Fetched Successfully".
+Now, I navigate the next page "Data Warehousing". Here there is a options box named "Select a Channel". This options box contains a list of Channel names. 
+The data of Channel Names are fetched in this options box after we enter a Channel ID in the first page and click on the button SCRAP.
+From the list of Channel Names, we get to choose any channel.
+After choosing a Channel, we get a button TO SQL to insert the Channel data into our SQL database.
+After the data is stored in our database, we get a message "Data Inserted in SQL".
+If the data already exists, we get to see "Data Already Exists in SQL".
+Now we move on to the next page "Query Data". We have 10 questions here, based the data stored in SQL each query should give us the correct answers. I have previously tested my SQL Queries using DBBrowser(SQLite) to check how the queries work on the stored data in the database.
+As the queries are written perfect, all the 10 queries were answered perfectly.
+
+
+
+
+
+
