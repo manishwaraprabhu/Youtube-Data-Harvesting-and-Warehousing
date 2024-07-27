@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 from googleapiclient.discovery import build
 import pandas as pd
+import isodate
 
 # Function to create tables
 def create_tables(conn):
@@ -302,6 +303,42 @@ def fetch_channel_id_from_name(conn, channel_name):
     result = cursor.fetchone()
     return result[0] if result else None
 
+def parse_duration(duration):
+    """Parse ISO 8601 duration format to total seconds."""
+    parsed_duration = isodate.parse_duration(duration)
+    return int(parsed_duration.total_seconds())
+
+# Function to automatically update database with new videos
+def update_database_with_new_videos(conn, api_key):
+    cursor = conn.cursor()
+
+    # Get all channel IDs from the database
+    cursor.execute("SELECT Channel_Id FROM Channel")
+    channel_ids = [row[0] for row in cursor.fetchall()]
+
+    for channel_id in channel_ids:
+        # Fetch current videos for the channel
+        existing_videos = set()
+        cursor.execute("SELECT Video_Id FROM Video WHERE Channel_Id = ?", (channel_id,))
+        existing_videos.update(row[0] for row in cursor.fetchall())
+
+        # Fetch new videos from YouTube API
+        new_videos = fetch_videos_data(channel_id, api_key)
+        new_video_ids = set(video['Video_Id'] for video in new_videos)
+
+        # Identify newly uploaded videos
+        newly_uploaded_videos = new_video_ids - existing_videos
+        if newly_uploaded_videos:
+            # Insert new videos and their comments into the database
+            for video in new_videos:
+                if video['Video_Id'] in newly_uploaded_videos:
+                    insert_videos_data(conn, [video])
+
+                    comments = fetch_comments_data(video['Video_Id'], api_key)
+                    insert_comments_data(conn, comments)
+
+    conn.commit()
+
 # Main Streamlit Application
 def main():
     st.set_page_config(page_title="YouTube Data Harvesting and Warehousing", page_icon="📹", layout="wide")
@@ -317,8 +354,12 @@ def main():
     if 'fetched_channel_data' not in st.session_state:
         st.session_state.fetched_channel_data = {}
 
-    # Define your API key here (ensure it's kept secure, consider using environment variables)
-    api_key="AIzaSyBnXekbxfU4xvN_XrYZPNLWa5wJzXx7SN4"
+    api_key = "AIzaSyDvmMKdabwHSyOBJPCDwIg8BOxtXvhP_zk"
+
+    if 'database_updated' not in st.session_state:
+        # Run the update function if it hasn't been run yet
+        update_database_with_new_videos(conn, api_key)
+        st.session_state.database_updated = True
 
     # Sidebar for navigation
     page = st.sidebar.radio("", ["Data Harvesting", "Data Warehousing", "Query Data"])
@@ -383,7 +424,6 @@ def main():
 
         else:
             selected_channel = st.selectbox("Select a Channel Name", [""])
-
 
     # Page 3: Query Data
     elif page == "Query Data":
