@@ -124,7 +124,7 @@ def fetch_videos_data(channel_id, api_key):
             part="id,snippet",
             channelId=channel_id,
             type="video",
-            maxResults=50,  # Maximum allowed value for maxResults
+            maxResults=50,
             pageToken=next_page_token
         )
         response = request.execute()
@@ -150,10 +150,9 @@ def fetch_videos_data(channel_id, api_key):
                     'Duration': video_data['contentDetails']['duration'],
                 })
 
-        # Get the next page token
         next_page_token = response.get('nextPageToken')
         if not next_page_token:
-            break  # Exit the loop if there are no more pages
+            break
 
     return videos
 
@@ -168,7 +167,7 @@ def fetch_comments_data(video_id, api_key):
         request = youtube.commentThreads().list(
             part="snippet",
             videoId=video_id,
-            maxResults=100,  # Maximum allowed value for maxResults in comments
+            maxResults=100,
             pageToken=next_page_token
         )
         response = request.execute()
@@ -184,10 +183,9 @@ def fetch_comments_data(video_id, api_key):
                     'Published_At': comment['publishedAt']
                 })
 
-        # Get the next page token
         next_page_token = response.get('nextPageToken')
         if not next_page_token:
-            break  # Exit the loop if there are no more pages
+            break
 
     return comments
 
@@ -357,7 +355,6 @@ def main():
     api_key = "AIzaSyDvmMKdabwHSyOBJPCDwIg8BOxtXvhP_zk"
 
     if 'database_updated' not in st.session_state:
-        # Run the update function if it hasn't been run yet
         update_database_with_new_videos(conn, api_key)
         st.session_state.database_updated = True
 
